@@ -11,11 +11,11 @@ def principal():
         """
 
 
-@app.route("/hola")
+@app.route("/hola")#ruta comun, saluda como nosotros lo programamos
 def saludar():
-    return "<p>hola</p>"
+    return "<p>hola</p>" 
 
-@app.route("/hola/<string:nombre>")
+@app.route("/hola/<string:nombre>") #ruta con argumento, saluda con el nombre que le dan, si comienza con <> siginifca que va a ir algo
 def saludar_con_nombre(nombre):
     return f"<p>hola {nombre}!</p>"
 
@@ -43,3 +43,4 @@ def llamar (nombre):
 
 
 #dos rutas, dos links
+
