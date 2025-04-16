@@ -1,14 +1,24 @@
-from flask import Flask
+from flask import Flask, url_for
+import sqlite3
 
 app = Flask(__name__)
 
 @app.route("/")
 def principal():
-    return """
-        <a href='/hola'>hola</a> 
-        <a href='/chau'>chau</a> 
-        <a href='/llamar'>llamar</a>
-        """
+    url_hola = url_for("saludar_con_nombre", nombre = "pepito")#ruta con argumento
+    url_dado = url_for("dado", caras=6)#ruta con argumento
+    url_logo = url_for("static", filename="img.webp")
+
+    return f"""
+    <a href="{url_hola}">Hola</a>
+    <br>
+    <a href="{url_for("despedir")}">Chau</a>
+    <br>
+    <a href="{url_logo}">Logo</a>
+    <br>
+    <a href="{url_dado}">Tirar dado</a>
+    """
+    
 
 
 @app.route("/hola")#ruta comun, saluda como nosotros lo programamos
@@ -32,7 +42,7 @@ def suma(n1, n2):
 
 
 @app.route("/chau")
-def despedir ():
+def despedir():
     return "<p>chau</p>"
 
 
@@ -41,6 +51,62 @@ def despedir ():
 def llamar (nombre):
     return f"<p> {nombre}!</p>"
 
-
 #dos rutas, dos links
+
+
+#-------------
+def main ():
+    url_hola = url_for("hello")
+    url_dado = url_for("dado", caras=6)
+    url_logo = url_for("static", filename="img/logo.png")
+
+    return f"""
+    <a href="{url_hola}">Hola</a>
+    <br>
+    <a href="{url_for("bye")}">Chau</a>
+    <br>
+    <a href="{url_logo}">Logo</a>
+    <br>
+    <a href="{url_dado}">Tirar dado</a>
+    """
+#-------------CONEXION A BASE DE DATOS---------------------------------#
+db=None #variable vacia
+
+def abrirConexion():
+    global db  # llama 
+    db = sqlite3.connect('instance/datos.sqlite') #abre lo que le ponemos dentro del parentesis
+    db.row_factory = sqlite3.Row
+    return db # devuelve
+
+def cerrarConexion():
+    global db #llama
+    if db is not None:#preunta si no esta vacio
+        db.close()#cierra
+        db=None#vuelve a estar vacio
+
+@app.route("/usuarios/")
+def obterGente():
+    global db 
+    conexion = abrirConexion()
+    cursor = conexion.cursor()
+    cursor.execute('SELECT * FROM usuarios')
+    resultado = cursor.fetchall()#fetchall es como el asterisco,selecciona todo en cambio el fetchone solo uno
+    cerrarConexion()
+    fila = [dict(row) for row in resultado] 
+    return str(fila)
+
+  
+
+
+
+
+
+
+
+#tipos de ruta
+#absoluto: con barra
+#relativo: sin barra 
+
+
+
 
