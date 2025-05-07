@@ -1,4 +1,4 @@
-from flask import Flask, url_for
+from flask import Flask, url_for, render_template
 import sqlite3
 
 app = Flask(__name__)
@@ -94,7 +94,7 @@ def main ():
 #    cerrarConexion()
 #    fila = [dict(row) for row in resultado] 
 #    return str(fila)
-#-------------------------------------------------
+#------------------------------------------------30-4- navarro
 db = None
 
 
@@ -168,7 +168,23 @@ def cambiar_email(usuario, email):
    cerrarConexion()
    return f"se le cambio el email a   quedo como :{resultado['usuario']}    email:{resultado['email']}"
 
+#----------------------------------------------------------7-5-navarro
+@app.route("/mostrar-datos-plantilla/<int:id>")
+def datos_plantilla(id):
+    abrirConexion()
+    cursor = db.cursor()
+    cursor.execute("SELECT id, usuario, email FROM usuarios WHERE id = ?;", (id,))
+    res = cursor.fetchone()
+    cerrarConexion()
+    usuario = None
+    email= None
+    if res != None:
+       usuario=res['usuario']
+       email=res['email']
+    return render_template("datos.html", id=id, usuario=usuario, email=email)
 
+
+ 
 
 
 
