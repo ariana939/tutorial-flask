@@ -1,14 +1,14 @@
 from flask import Flask, url_for, render_template
 import sqlite3
 
-app = Flask(__name__)
+app = Flask(__name__)    
 
 @app.route("/")
 def principal():
     url_hola = url_for("saludar_con_nombre", nombre = "pepito")#ruta con argumento
     url_dado = url_for("dado", caras=6)#ruta con argumento
     url_logo = url_for("static", filename="img.webp")
-
+   
     return f"""
     <a href="{url_hola}">Hola</a>
     <br>
@@ -18,8 +18,6 @@ def principal():
     <br>
     <a href="{url_dado}">Tirar dado</a>
     """
-    
-
 
 @app.route("/hola")#ruta comun, saluda como nosotros lo programamos
 def saludar():
@@ -189,8 +187,24 @@ def datos_plantilla(id):
 
 
 
+@app.route("/mostar-datos-plantilla")
+def lista_de_usuario():
+    abrirConexion()
+    cursor = db.cursor()
+    cursor.execute("SELECT usuario FROM usuarios")
+    res = cursor.fetchall()
+    cerrarConexion()
+    return render_template("listaDeUsuario.html", usuarios = [res])
 
-
+@app.route("/usuarios")
+def mostrar():
+    url_datos1 = url_for("datos_plantilla", id=1)  
+    url_datos2 = url_for("datos_plantilla", id=2)
+    return f"""
+        <a href="{url_datos1}">Andres</a>
+        <br>
+        <a href="{url_datos2}">Tomas</a>
+    """
 
 
 
