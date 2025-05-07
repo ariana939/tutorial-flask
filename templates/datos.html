@@ -10,7 +10,13 @@
     <h1 style="color: red">No existe el usuario{{id}}</h1>
     {% else %}
     <h1>Usuario con id: {{id}}</h1>
-    <h2>{{usuario}} ({{email}})</h2>
+    <ul>
+        <li>nombre: {{usuario}} </li>
+        <li>mail: ({{email}})</li>
+        <li>telefono: {{telefono}}</li>
+        <li>direccion: {{direccion}}</li>
+    </ul>
+    
     {% endif %}
   </body>
 </html>
